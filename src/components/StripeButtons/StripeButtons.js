@@ -1,66 +1,68 @@
-import StripeCheckout from 'react-stripe-checkout'
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLoading } from '../../hooks/useLoading';
 import { pay } from '../../services/orderService';
 import { useCart } from '../../hooks/useCart';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import classes from'./stripeButtons.module.css'
+import Button from '../Button/Button';
 
-export default function StripeButtons({order}) {
-  return (
-    <StripeCheckout
-    options={{
-      clientId:
-        'pk_test_51P174OSJanGu1kzMO6TwKn6eNw6Uwi8HHzlU7GE7i6XMHPj49Ivijdj46HE801DEWSeBfk9x8Hpi02xDDELr28Wl00B3kePEDT',
-    }}
-    >
-
-      <Buttons order={order}/>
-    </StripeCheckout>
-  );
-}
-function Buttons({ order }) {
+export default function StripePayment({ order }) {
+  const stripe = useStripe();
+  const elements = useElements();
   const { clearCart } = useCart();
   const navigate = useNavigate();
-  const [{ isPending }] = {};
   const { showLoading, hideLoading } = useLoading();
-  useEffect(() => {
-    isPending ? showLoading() : hideLoading();
-  });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const createOrder = (data, actions) => {
-    return actions.order.create({ 
-      purchase_units: [
-        {
-          amount: {
-            currency_code: 'INR',
-            value: order.totalPrice,
-          },
-        },
-      ],
-    });
-  }
-  const onApprove = async (data, actions) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    showLoading();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    const cardElement = elements.getElement(CardElement);
+
     try {
-      const payment = await actions.order.capture();
-      const orderId = await pay(payment.id);
+      const { paymentMethod } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+      });
+
+      const orderId = await pay(paymentMethod.id); // Assuming pay method handles payment processing
+
       clearCart();
       toast.success('Payment Saved Successfully', 'Success');
       navigate('/track/' + orderId);
     } catch (error) {
       toast.error('Payment Save Failed', 'Error');
+      setError(error.message || 'An error occurred');
+    } finally {
+      setLoading(false);
+      hideLoading();
     }
   };
 
-  const onError = err => {
-    toast.error('Payment Failed', 'Error');
-  };
-
   return (
-    <StripeCheckout
-      createOrder={createOrder}
-      onApprove={onApprove}
-      onError={onError}
-    />
+    <div className={classes.buttons_container}>
+      <div className={classes.buttons}>
+    <form onSubmit={handleSubmit}>
+      <CardElement />
+      <Button type="submit" 
+              text="Pay"
+              width="100%"
+              height="3rem"
+              disabled={!stripe || loading}>
+        Pay
+      </Button>
+      {error && <div>{error}</div>}
+    </form>
+    </div>
+    </div>
   );
 }

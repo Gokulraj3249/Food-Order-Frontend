@@ -66,7 +66,7 @@ export default function CheckoutPage() {
           />
         </div>
 
-        <div className={classes.buttons_container}>
+        <div className={classes.buttons_container}> 
           <div className={classes.buttons}>
             <Button
               type="submit"
