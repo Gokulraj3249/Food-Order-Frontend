@@ -8,7 +8,7 @@ export default function Header() {
   const { user, logout } = useAuth();
 
   const { cart } = useCart();
-
+ 
   return (
     <header className={classes.header}>
       <div className={classes.container}>

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Price from '../../components/Price/Price';
-import StarRating from '../../components/StarRating/StarRating';
 import Tags from '../../components/Tags/Tags';
 import { useCart } from '../../hooks/useCart';
 import { getById } from '../../services/foodService';
@@ -36,9 +35,6 @@ export default function FoodPage() {
           <div className={classes.details}>
             <div className={classes.header}>
               <span className={classes.name}>{food.name}</span>
-            </div>
-            <div className={classes.rating}>
-              <StarRating stars={food.stars} size={25} />
             </div>
 
             <div className={classes.origins}>

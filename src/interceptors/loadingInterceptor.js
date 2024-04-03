@@ -6,7 +6,7 @@ export const setLoadingInterceptor = ({ showLoading, hideLoading }) => {
       if (!(req.data instanceof FormData)) showLoading();
       return req;
     },
-    error => {
+    error => {   
       hideLoading();
       return Promise.reject(error);
     }

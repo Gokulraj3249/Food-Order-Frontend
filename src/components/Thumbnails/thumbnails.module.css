@@ -5,6 +5,14 @@
   flex-wrap: wrap;
   list-style-type: none;
   padding: 0;
+  width: 100%;
+  height: 100%;
+  filter: grayscale(0%);
+  }
+
+
+.list :hover{
+  filter: grayscale(20%);
 }
 
 .list li a {
@@ -29,21 +37,6 @@
   padding: 0.5rem 1rem;
   position: relative;
   height: 7rem;
-}
-
-.favorite {
-  position: absolute;
-  top: 0.5rem;
-  right: 1rem;
-  font-size: 1.2rem;
-}
-
-.favorite.not {
-  color: grey;
-}
-
-.stars {
-  margin: 0.5rem 0;
 }
 
 .product_item_footer {

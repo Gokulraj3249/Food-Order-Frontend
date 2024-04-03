@@ -5,8 +5,10 @@ import Title from '../../components/Title/Title';
 import OrderItemsList from '../../components/OrderItemsList/OrderItemsList';
 import Map from '../../components/Map/Map';
 import PaypalButtons from '../../components/PaypalButtons/PaypalButtons';
+import StripeButtons from '../../components/StripeButtons/StripeButtons';
 
-export default function PaymentPage() {
+
+export default function PaymentPage() { 
   const [order, setOrder] = useState();
 
   useEffect(() => {
@@ -41,9 +43,10 @@ export default function PaymentPage() {
         <div className={classes.buttons_container}>
           <div className={classes.buttons}>
             <PaypalButtons order={order} />
+            {/* <StripeButtons order={order} /> */}
           </div>
         </div>
       </div>
-    </>
+    </> 
   );
 }

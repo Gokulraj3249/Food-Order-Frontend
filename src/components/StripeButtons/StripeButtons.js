@@ -1,8 +1,4 @@
-import {
-  PayPalButtons,
-  PayPalScriptProvider,
-  usePayPalScriptReducer,
-} from '@paypal/react-paypal-js';
+import StripeCheckout from 'react-stripe-checkout'
 import React, { useEffect } from 'react';
 import { useLoading } from '../../hooks/useLoading';
 import { pay } from '../../services/orderService';
@@ -10,23 +6,23 @@ import { useCart } from '../../hooks/useCart';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-export default function PaypalButtons({ order }) {
+export default function StripeButtons({order}) {
   return (
-    <PayPalScriptProvider
-      options={{
-        clientId:
-          'AUWcnaHjOUoXVI3IjLpMkM0Kk0Sigq1CUAWP-finHI950yQD2Qni8XPkRbs76Q-_JIT8hJFhKD8YVy3u',
-      }}
+    <StripeCheckout
+    options={{
+      clientId:
+        'pk_test_51P174OSJanGu1kzMO6TwKn6eNw6Uwi8HHzlU7GE7i6XMHPj49Ivijdj46HE801DEWSeBfk9x8Hpi02xDDELr28Wl00B3kePEDT',
+    }}
     >
-      <Buttons order={order} />
-    </PayPalScriptProvider>
+
+      <Buttons order={order}/>
+    </StripeCheckout>
   );
 }
-
 function Buttons({ order }) {
   const { clearCart } = useCart();
   const navigate = useNavigate();
-  const [{ isPending }] = usePayPalScriptReducer();
+  const [{ isPending }] = {};
   const { showLoading, hideLoading } = useLoading();
   useEffect(() => {
     isPending ? showLoading() : hideLoading();
@@ -37,14 +33,13 @@ function Buttons({ order }) {
       purchase_units: [
         {
           amount: {
-            currency_code: 'USD',
+            currency_code: 'INR',
             value: order.totalPrice,
           },
         },
       ],
     });
-  };
-
+  }
   const onApprove = async (data, actions) => {
     try {
       const payment = await actions.order.capture();
@@ -62,7 +57,7 @@ function Buttons({ order }) {
   };
 
   return (
-    <PayPalButtons
+    <StripeCheckout
       createOrder={createOrder}
       onApprove={onApprove}
       onError={onError}

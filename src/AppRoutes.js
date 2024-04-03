@@ -34,7 +34,7 @@ export default function AppRoutes() {
           <AuthRoute>
             <CheckoutPage />
           </AuthRoute>
-        }
+        } 
       />
       <Route
         path="/payment"
