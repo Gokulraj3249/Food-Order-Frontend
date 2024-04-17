@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import classes from'./stripeButtons.module.css'
-import Button from '../Button/Button';
+import Button from '../Button/Button'; 
 
 export default function StripePayment({ order }) {
   const stripe = useStripe();
@@ -38,7 +38,7 @@ export default function StripePayment({ order }) {
 
       clearCart();
       toast.success('Payment Saved Successfully', 'Success');
-      navigate('/track/' + orderId);
+      navigate('/track/'+ orderId);
     } catch (error) {
       toast.error('Payment Save Failed', 'Error');
       setError(error.message || 'An error occurred');

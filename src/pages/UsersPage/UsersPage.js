@@ -48,7 +48,7 @@ export default function UsersPage() {
         {users &&
           users.map(user => (
             <div key={user.id} className={classes.list_item}>
-              <span>{user.name}</span>
+              <span>{user.name}</span> 
               <span>{user.email}</span>
               <span>{user.address}</span>
               <span>{user.isAdmin ? '✅' : '❌'}</span>
